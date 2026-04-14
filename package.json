@@ -1,7 +1,7 @@
 {
   "name": "tagchat",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "TagChat — Native desktop collaboration hub for MAYA: Seed Takes Root",
   "scripts": {

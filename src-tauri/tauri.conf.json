@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicerdicer/tauri-schema/refs/heads/v2-rewrite/tauri.conf.schema.json",
   "productName": "TagChat",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "identifier": "com.deptoflore.tagchat",
   "build": {
     "beforeDevCommand": "npm run dev",
