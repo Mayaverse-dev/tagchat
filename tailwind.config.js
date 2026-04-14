@@ -12,8 +12,8 @@ export default {
           foreground: 'hsl(var(--card-foreground))',
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
@@ -38,21 +38,18 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        surface: 'var(--bg-panel)',
-        maya: {
-          gold: '#f59e0b',
-          crimson: '#ef4444',
-          violet: '#8b5cf6',
-          emerald: '#22c55e',
-          sky: '#0ea5e9',
-          orange: '#f97316',
-          cyan: '#06b6d4',
-        },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: 'var(--p-radius-lg, 12px)',
+        md: 'var(--p-radius, 8px)',
+        sm: 'var(--p-radius-sm, 6px)',
+      },
+      transitionTimingFunction: {
+        native: 'var(--p-ease)',
+      },
+      transitionDuration: {
+        native: 'var(--p-duration)',
+        'native-fast': 'var(--p-duration-fast)',
       },
     },
   },

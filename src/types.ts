@@ -1,4 +1,4 @@
-export type View = 'chat' | 'dashboard' | 'calendar' | 'tasks'
+export type View = 'dashboard' | 'chat' | 'calendar' | 'tasks' | 'files' | 'meetings' | 'settings'
 
 export interface Channel {
   id: string

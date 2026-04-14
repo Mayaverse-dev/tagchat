@@ -4,54 +4,195 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262 52% 68%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 142.1 76.2% 36.3%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262 52% 68%;
+    --background: 228 25% 6%;
+    --foreground: 220 15% 93%;
+    --card: 228 22% 9%;
+    --card-foreground: 220 15% 93%;
+    --primary: 262 52% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 20% 13%;
+    --secondary-foreground: 220 15% 80%;
+    --muted: 228 18% 16%;
+    --muted-foreground: 220 12% 58%;
+    --accent: 262 52% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 228 18% 14%;
+    --input: 228 18% 14%;
+    --ring: 262 52% 65%;
     --radius: 0.5rem;
+    color-scheme: dark;
+  }
 
-    --bg-primary: #0b0d14;
-    --bg-secondary: #0f1120;
-    --bg-panel: rgba(13, 16, 30, 0.92);
-    --bg-elevated: #161830;
-    --fg-primary: #e4e4ef;
-    --fg-secondary: #94a3b8;
+  .dark { color-scheme: dark; }
+  :not(.dark) { color-scheme: light; }
+
+  * { @apply border-border; }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  [data-platform="macos"] {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    --p-radius: 10px;
+    --p-radius-sm: 8px;
+    --p-radius-lg: 14px;
+    --p-ease: cubic-bezier(0.2, 0.9, 0.3, 1.0);
+    --p-duration: 320ms;
+    --p-duration-fast: 180ms;
+    letter-spacing: -0.01em;
+  }
+
+  [data-platform="windows"] {
+    font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+    --p-radius: 6px;
+    --p-radius-sm: 4px;
+    --p-radius-lg: 8px;
+    --p-ease: cubic-bezier(0.1, 0.9, 0.2, 1.0);
+    --p-duration: 250ms;
+    --p-duration-fast: 140ms;
+  }
+
+  [data-platform="linux"], [data-platform="unknown"] {
+    font-family: system-ui, -apple-system, sans-serif;
+    --p-radius: 8px;
+    --p-radius-sm: 6px;
+    --p-radius-lg: 12px;
+    --p-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --p-duration: 280ms;
+    --p-duration-fast: 160ms;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100vh;
   }
 }
 
-body {
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: var(--bg-primary);
-  color: var(--fg-primary);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  -webkit-font-smoothing: antialiased;
+@layer components {
+  .tc-card {
+    @apply bg-card text-card-foreground border border-border;
+    border-radius: var(--p-radius);
+    transition: border-color var(--p-duration-fast) var(--p-ease),
+                box-shadow var(--p-duration-fast) var(--p-ease);
+  }
+  .tc-card:hover {
+    @apply border-primary/20;
+  }
+
+  .tc-surface {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+    border-radius: var(--p-radius);
+  }
+
+  .tc-btn {
+    @apply inline-flex items-center justify-center font-medium text-sm;
+    @apply transition-all active:scale-[0.97];
+    border-radius: var(--p-radius-sm);
+    transition-duration: var(--p-duration-fast);
+    transition-timing-function: var(--p-ease);
+  }
+
+  .tc-btn-primary {
+    @apply tc-btn bg-primary text-primary-foreground hover:brightness-110;
+  }
+
+  .tc-btn-secondary {
+    @apply tc-btn bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+
+  .tc-btn-ghost {
+    @apply tc-btn text-muted-foreground hover:bg-secondary hover:text-foreground;
+  }
+
+  .tc-input {
+    @apply bg-secondary border border-input text-foreground text-sm;
+    @apply outline-none placeholder:text-muted-foreground;
+    @apply focus:border-primary focus:ring-1 focus:ring-ring/30;
+    border-radius: var(--p-radius-sm);
+    padding: 8px 12px;
+    transition: border-color var(--p-duration-fast) var(--p-ease),
+                box-shadow var(--p-duration-fast) var(--p-ease);
+  }
+
+  .tc-badge-phase2 {
+    @apply text-[9px] font-bold uppercase tracking-wider;
+    @apply px-1.5 py-0.5 rounded-full;
+    @apply bg-primary/10 text-primary;
+  }
+
+  .tc-nav-item {
+    @apply flex items-center gap-2.5 w-full text-left font-medium text-[13px];
+    @apply text-muted-foreground;
+    padding: 8px 12px;
+    border-radius: var(--p-radius-sm);
+    transition: all var(--p-duration-fast) var(--p-ease);
+  }
+  .tc-nav-item:hover {
+    @apply bg-secondary text-foreground;
+  }
+  .tc-nav-item.active {
+    @apply bg-primary/10 text-primary;
+  }
+
+  .tc-fade-in {
+    animation: tcFadeIn var(--p-duration) var(--p-ease) both;
+  }
+
+  .tc-slide-up {
+    animation: tcSlideUp var(--p-duration) var(--p-ease) both;
+  }
 }
 
-#root {
-  height: 100vh;
+@layer utilities {
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+  .no-drag {
+    -webkit-app-region: no-drag;
+  }
 }
 
-::-webkit-scrollbar { width: 6px; }
+@keyframes tcFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes tcSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tcPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: hsl(217.2 32.6% 25%); }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.35);
+}
+
+[data-platform="macos"] ::-webkit-scrollbar { width: 8px; }
+[data-platform="macos"] ::-webkit-scrollbar-thumb { border-radius: 4px; }
 
 textarea { field-sizing: content; }
+
+::selection {
+  background: hsl(var(--primary) / 0.25);
+}
