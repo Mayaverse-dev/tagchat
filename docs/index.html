@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TagChat — Download</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0b0d14;
+      color: #e4e4ef;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container { max-width: 520px; width: 100%; padding: 48px 32px; text-align: center; }
+    .logo {
+      width: 72px; height: 72px; border-radius: 18px;
+      background: linear-gradient(135deg, #7c5cff, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 700; color: white;
+      margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(124,92,255,0.3);
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 36px; line-height: 1.6; }
+    .auth-section { margin-bottom: 32px; }
+    input[type="password"] {
+      background: #161830; border: 1px solid #2a2a3d; color: #e4e4ef;
+      padding: 14px 20px; border-radius: 10px; font-size: 15px;
+      font-family: inherit; outline: none; text-align: center;
+      letter-spacing: 3px; width: 100%; margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: #7c5cff; }
+    .btn {
+      background: #7c5cff; color: white; border: none;
+      padding: 14px 32px; border-radius: 10px; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: all 0.15s;
+      width: 100%;
+    }
+    .btn:hover { background: #9178ff; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,92,255,0.4); }
+    .error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+    .downloads { display: none; }
+    .downloads.show { display: block; }
+    .download-grid { display: flex; gap: 16px; margin: 24px 0; }
+    .download-card {
+      flex: 1; background: #161830; border: 1px solid #2a2a3d;
+      border-radius: 14px; padding: 28px 16px; text-align: center;
+      transition: all 0.2s; text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .download-card:hover { border-color: #7c5cff; background: #1a1c38; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .platform-icon { font-size: 40px; }
+    .platform-name { font-weight: 600; font-size: 16px; }
+    .platform-detail { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+    .file-size { font-size: 11px; color: #6b6b82; margin-top: 4px; }
+    .version { color: #6b6b82; font-size: 12px; margin-top: 16px; }
+    .footer { margin-top: 48px; font-size: 11px; color: #3a3a52; }
+    .footer a { color: #6b6b82; text-decoration: none; }
+    .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; margin-right: 6px; }
+    .building { background: #eab308; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">M</div>
+    <h1>TagChat</h1>
+    <p class="subtitle">
+      MAYA: Seed Takes Root — Publishing Collaboration Hub<br>
+      <span style="font-size: 12px; color: #6b6b82;">Authors Equity × Dept of Lore</span>
+    </p>
+
+    <div class="auth-section" id="authSection">
+      <input type="password" id="pw" placeholder="Enter access code" autocomplete="off">
+      <button class="btn" id="authBtn">Access Downloads</button>
+      <div class="error" id="err"></div>
+    </div>
+
+    <div class="downloads" id="dl">
+      <p style="font-size: 14px; color: #94a3b8;">Choose your platform:</p>
+      <div class="download-grid">
+        <a class="download-card" id="macLink" href="#" target="_blank">
+          <span class="platform-icon"></span>
+          <span class="platform-name">macOS</span>
+          <span class="platform-detail">Apple Silicon & Intel<br>.dmg installer</span>
+          <span class="file-size" id="macSize"></span>
+        </a>
+        <a class="download-card" id="winLink" href="#" target="_blank">
+          <span class="platform-icon">🪟</span>
+          <span class="platform-name">Windows</span>
+          <span class="platform-detail">Windows 10/11<br>.exe installer</span>
+          <span class="file-size" id="winSize"></span>
+        </a>
+      </div>
+      <div class="version" id="ver"></div>
+    </div>
+
+    <div class="footer">
+      <p>Dept of Lore — Proprietary Software</p>
+    </div>
+  </div>
+
+  <script>
+    const REPO = 'Mayaverse-dev/tagchat'
+    const KEY = 'avatigaman'
+    const HASH = '9a0e7c4c8e3b6f0d2e1a5f8c7b4d3e2a1f0c9b8a' // not real hash, just simple check
+
+    if (localStorage.getItem('tc_auth') === btoa(KEY)) showDownloads()
+
+    document.getElementById('authBtn').onclick = auth
+    document.getElementById('pw').onkeydown = e => { if (e.key === 'Enter') auth() }
+
+    function auth() {
+      const v = document.getElementById('pw').value
+      const err = document.getElementById('err')
+      if (v === KEY) {
+        localStorage.setItem('tc_auth', btoa(KEY))
+        showDownloads()
+      } else {
+        err.textContent = 'Incorrect access code'
+        err.style.display = 'block'
+      }
+    }
+
+    function showDownloads() {
+      document.getElementById('authSection').style.display = 'none'
+      document.getElementById('dl').classList.add('show')
+      loadRelease()
+    }
+
+    async function loadRelease() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
+        if (!res.ok) {
+          document.getElementById('ver').innerHTML = '<span class="status-dot building"></span>Building... check back soon'
+          return
+        }
+        const data = await res.json()
+        document.getElementById('ver').textContent = `Version ${data.tag_name} — ${new Date(data.published_at).toLocaleDateString()}`
+
+        const assets = data.assets || []
+        const dmg = assets.find(a => a.name.endsWith('.dmg'))
+        const exe = assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.msi'))
+        const nsis = assets.find(a => a.name.includes('nsis') && a.name.endsWith('.exe'))
+
+        if (dmg) {
+          document.getElementById('macLink').href = dmg.browser_download_url
+          document.getElementById('macSize').textContent = formatSize(dmg.size)
+        } else {
+          document.getElementById('macLink').style.opacity = '0.4'
+          document.getElementById('macLink').style.pointerEvents = 'none'
+          document.getElementById('macSize').textContent = 'Building...'
+        }
+
+        const winAsset = nsis || exe
+        if (winAsset) {
+          document.getElementById('winLink').href = winAsset.browser_download_url
+          document.getElementById('winSize').textContent = formatSize(winAsset.size)
+        } else {
+          document.getElementById('winLink').style.opacity = '0.4'
+          document.getElementById('winLink').style.pointerEvents = 'none'
+          document.getElementById('winSize').textContent = 'Building...'
+        }
+      } catch (e) {
+        document.getElementById('ver').innerHTML = '<span class="status-dot building"></span>Loading release info...'
+      }
+    }
+
+    function formatSize(bytes) {
+      if (bytes > 1e6) return (bytes / 1e6).toFixed(1) + ' MB'
+      return (bytes / 1e3).toFixed(0) + ' KB'
+    }
+  </script>
+</body>
+</html>
