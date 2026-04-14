@@ -1,0 +1,14 @@
+{
+  "name": "tagchat-server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TagChat download & update server",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

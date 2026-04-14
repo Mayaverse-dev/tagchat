@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-electron/
+target/
+*.dmg
+*.exe
+*.msi
+*.app
+*.app.tar.gz
+*.sig
+.DS_Store
+._*
+server/releases/
+server/node_modules/
