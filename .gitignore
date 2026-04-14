@@ -2,6 +2,7 @@ node_modules/
 dist/
 dist-electron/
 target/
+src-tauri/target
 *.dmg
 *.exe
 *.msi
